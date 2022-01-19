@@ -12,12 +12,12 @@
         <h1>To-Do List for <%= kindOfDay %></h1>
     </div>
     <div class="box">
-        <%for(let i=0; i<tasks.length; i++){%>
+        <% tasks.forEach((task) => { %>
             <div class="item">
                 <input type="checkbox">
-                <p><%= tasks[i].name %></p>
+                <p><%= task.name %></p>
             </div>
-        <%}%>
+        <% }); %>
         <form action="/" method="post" class="item">
             <input type="text" name="task" placeholder="New Item" autocomplete="off">
             <button type="submit">+</button>
