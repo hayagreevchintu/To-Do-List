@@ -8,8 +8,6 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 
-let items = [];
-
 mongoose.connect("mongodb://localhost:27017/todoListDB");
 
 const itemsSchema = {
@@ -21,16 +19,6 @@ const itemsSchema = {
 
 const Item = mongoose.model("Item", itemsSchema);
 
-Item.find((err, itemss) => {
-    if(err){
-        console.log(err);
-    }else{
-        itemss.forEach((item) => {
-            items.push(item.name);
-        });
-    }
-});
-
 let updateList = (item) => {
     let newItem = new Item({
         name: item
@@ -39,6 +27,7 @@ let updateList = (item) => {
 };
 
 app.get('/', (req, res) => {
+    let items = [];
     let today = new Date();
     let options = {
         weekday: "long",
@@ -46,7 +35,18 @@ app.get('/', (req, res) => {
         month: "long"
     };
     let day = today.toLocaleDateString("en-US",options);
-    res.render("list", {kindOfDay: day, tasks: items});
+    Item.find((err, itemss) => {
+        if(err){
+            console.log(err);
+        }else{
+            itemss.forEach((item) => {
+                items.push(item.name);
+            });
+        }
+        res.send(items);
+    });
+    // res.render("list", {kindOfDay: day, tasks: items});
+
     console.log(items);
 });
 
