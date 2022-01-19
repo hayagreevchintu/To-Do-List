@@ -40,14 +40,12 @@ app.get('/', (req, res) => {
             console.log(err);
         }else{
             itemss.forEach((item) => {
-                items.push(item.name);
+                items.push(item);
             });
         }
-        res.send(items);
+        res.render("list", {kindOfDay: day, tasks: items});
+        console.log(items);
     });
-    // res.render("list", {kindOfDay: day, tasks: items});
-
-    console.log(items);
 });
 
 app.post('/', (req, res) => {
