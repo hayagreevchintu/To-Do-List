@@ -19,6 +19,18 @@ const itemsSchema = {
 
 const Item = mongoose.model("Item", itemsSchema);
 
+const item1 = new Item({
+    name: "Wake up."
+});
+const item2 = new Item({
+    name: "Brush your teeth."
+});
+const item3 = new Item({
+    name: "Drink Coffee."
+});
+
+const defaultItems = [item1, item2, item3];
+
 let updateList = (item) => {
     let newItem = new Item({
         name: item
@@ -35,16 +47,23 @@ app.get('/', (req, res) => {
         month: "long"
     };
     let day = today.toLocaleDateString("en-US",options);
-    Item.find((err, itemss) => {
+    Item.find((err, foundItems) => {
         if(err){
             console.log(err);
-        }else{
-            itemss.forEach((item) => {
-                items.push(item);
+        } if(foundItems.length === 0){
+            Item.insertMany(defaultItems, (err) => {
+                if(err){
+                    console.log(err);
+                } else{
+                    console.log("Inserted default items successfully.");
+                }
             });
+            res.redirect('/');
         }
-        res.render("list", {kindOfDay: day, tasks: items});
-        console.log(items);
+         else{
+            res.render("list", {kindOfDay: day, tasks: foundItems});    
+        }
+        console.log(foundItems);
     });
 });
 
