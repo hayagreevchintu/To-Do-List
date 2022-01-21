@@ -11,14 +11,16 @@
     <div class="box" id="heading">
         <h1>To-Do List for <%= kindOfDay %></h1>
     </div>
-    <div class="box">
-        <% tasks.forEach((task) => { %>
-            <div class="item">
-                <input type="checkbox">
-                <p><%= task.name %></p>
-            </div>
-        <% }); %>
-        <form action="/" method="post" class="item">
+    <form action="/delete" method="post">
+        <div class="box">
+            <% tasks.forEach((task) => { %>
+                <div class="item">
+                    <input type="checkbox" name="checkbox" value="<%= task.id %>" onchange="this.form.submit();">
+                    <p><%= task.name %></p>
+                </div>
+            <% }); %>
+    </form>
+    <form action="/" method="post" class="item">
             <input type="text" name="task" placeholder="New Item" autocomplete="off">
             <button type="submit">+</button>
         </form>

@@ -73,6 +73,18 @@ app.post('/', (req, res) => {
     res.redirect('/');
 });
 
+app.post('/delete', (req, res) => {
+    const idDelete = req.body.checkbox;
+    Item.findByIdAndRemove(idDelete, (err) => {
+        if(err){
+            console.log(err);
+        } else{
+            console.log("Deleted Successfully.");
+        }
+    });
+    res.redirect('/');
+});
+
 app.listen(3000, () => {
     console.log("Server is up and running!");
 });
