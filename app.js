@@ -67,7 +67,7 @@ app.get('/', (req, res) => {
             res.redirect('/');
         }
          else{
-            res.render("list", {kindOfDay: day, tasks: foundItems});    
+            res.render("list", {listName: day, newListItems: foundItems});    
         }
         console.log(foundItems);
     });
@@ -75,28 +75,18 @@ app.get('/', (req, res) => {
 
 app.get('/:listName', (req, res) => {
     const listName = req.params.listName;
-    List.find((err, results) => {
-        if(err){
-            console.log(err);
-        } else{
-            const newList = new List({
-                name: listName,
-                items : defaultItems
-            });
-            const names = [];
-            results.forEach((item) => {
-                names.push(item.name);
-            });
-            if(names.length > 0){
-                if(names.includes(listName)){
-                    console.log("Already Present");
-                } else{
-                    newList.save();
-                    console.log(`Inserted ${listName} successfully`);
-                }
-            } else{
+    List.findOne({name: listName}, (err, foundList) => {
+        if(!err){
+            if(!foundList){
+                const newList = new List({
+                    name: listName,
+                    items : defaultItems
+                });
                 newList.save();
-                console.log(`Inserted ${listName} successfully`);
+                console.log(`Saved ${listName} successfully`);
+                res.redirect("/" + listName);
+            } else{
+                res.render("list", {listName: foundList.name, newListItems: foundList.items});
             }
         }
     });

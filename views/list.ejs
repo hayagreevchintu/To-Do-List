@@ -10,14 +10,14 @@
 </head>
 <body>
     <div class="box" id="heading">
-        <h1>To-Do List for <%= kindOfDay %></h1>
+        <h1><%= listName %></h1>
     </div>
     <form action="/delete" method="post">
         <div class="box">
-            <% tasks.forEach((task) => { %>
+            <% newListItems.forEach((item) => { %>
                 <div class="item">
-                    <input type="checkbox" name="checkbox" value="<%= task.id %>" onchange="this.form.submit();">
-                    <p><%= task.name %></p>
+                    <input type="checkbox" name="checkbox" value="<%= item.id %>" onchange="this.form.submit();">
+                    <p><%= item.name %></p>
                 </div>
             <% }); %>
     </form>
