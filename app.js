@@ -31,6 +31,12 @@ const item3 = new Item({
 
 const defaultItems = [item1, item2, item3];
 
+const listSchema = {
+    name: String,
+    items : [itemsSchema],
+}
+const List = mongoose.model("List", listSchema);
+
 let updateList = (item) => {
     let newItem = new Item({
         name: item
@@ -64,6 +70,35 @@ app.get('/', (req, res) => {
             res.render("list", {kindOfDay: day, tasks: foundItems});    
         }
         console.log(foundItems);
+    });
+});
+
+app.get('/:listName', (req, res) => {
+    const listName = req.params.listName;
+    List.find((err, results) => {
+        if(err){
+            console.log(err);
+        } else{
+            const newList = new List({
+                name: listName,
+                items : defaultItems
+            });
+            const names = [];
+            results.forEach((item) => {
+                names.push(item.name);
+            });
+            if(names.length > 0){
+                if(names.includes(listName)){
+                    console.log("Already Present");
+                } else{
+                    newList.save();
+                    console.log(`Inserted ${listName} successfully`);
+                }
+            } else{
+                newList.save();
+                console.log(`Inserted ${listName} successfully`);
+            }
+        }
     });
 });
 
