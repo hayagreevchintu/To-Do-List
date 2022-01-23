@@ -37,22 +37,8 @@ const listSchema = {
 }
 const List = mongoose.model("List", listSchema);
 
-let updateList = (item) => {
-    let newItem = new Item({
-        name: item
-    });
-    newItem.save();
-};
-
 app.get('/', (req, res) => {
-    let items = [];
-    let today = new Date();
-    let options = {
-        weekday: "long",
-        day: "numeric",
-        month: "long"
-    };
-    let day = today.toLocaleDateString("en-US",options);
+    let day = "Today";
     Item.find((err, foundItems) => {
         if(err){
             console.log(err);
@@ -94,8 +80,20 @@ app.get('/:listName', (req, res) => {
 
 app.post('/', (req, res) => {
     let item = req.body.task;
-    updateList(item);
-    res.redirect('/');
+    let listName = req.body.list;
+    let newItem = new Item({
+        name: item
+    });
+    if(listName === "Today"){
+        newItem.save();
+        res.redirect('/');
+    } else{
+        List.findOne({name : listName}, (err, foundItems) => {
+            foundItems.items.push(newItem);
+            foundItems.save();
+            res.redirect('/' + listName);
+        });
+    }
 });
 
 app.post('/delete', (req, res) => {
