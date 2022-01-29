@@ -13,6 +13,7 @@
         <h1><%= listName %></h1>
     </div>
     <form action="/delete" method="post">
+        <input type="hidden" name="listName" value="<%= listName %>">
         <div class="box">
             <% newListItems.forEach((item) => { %>
                 <div class="item">
