@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const { urlencoded } = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
+const _ = require('lodash');
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
@@ -60,7 +61,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/:listName', (req, res) => {
-    const listName = req.params.listName;
+    const listName = _.capitalize(req.params.listName);
     List.findOne({name: listName}, (err, foundList) => {
         if(!err){
             if(!foundList){
