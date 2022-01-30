@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const _ = require("lodash");
-
+require('dotenv').config({path: __dirname + '/.env'});
 const app = express();
 
 app.set("view engine", "ejs");
@@ -120,7 +120,7 @@ app.post("/delete", (req, res) => {
     }
 });
 
-let port = process.env.port;
+let port = process.env.PORT;
 if(port == null || port == ""){
     port = 3000;
 }
