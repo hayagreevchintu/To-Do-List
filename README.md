@@ -15,4 +15,4 @@ Both the lists will get loaded with 3 default items: Wake Up, Brush your teeth a
 ![alt text](Screenshots/To-Do.png "Default List")
 
 
-![alt text](Screenshots/To-Do.png "Custom List")
+![alt text](Screenshots/To-Do-Custom.png "Custom List")
