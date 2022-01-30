@@ -41,7 +41,6 @@ const listSchema = {
 const List = mongoose.model("List", listSchema);
 
 app.get("/", (req, res) => {
-
     let day = "Today";
     Item.find({},(err, foundItems) => {
         
@@ -126,5 +125,5 @@ if(port == null || port == ""){
 }
 
 app.listen(port, () => {
-    console.log("Server is up and running!");
+    console.log(`Server is up and running on port ${port}!`);
 });

@@ -7,6 +7,18 @@
     <title>To Do List</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon" href="data:,">
+    <script type='text/javascript'>
+        (() => {
+            if(window.localStorage) {
+                if (!localStorage.getItem('reload')) {
+                    localStorage['reload'] = true;
+                    window.location.reload();
+                } else {
+                    localStorage.removeItem('reload');
+                }
+            }
+        })();
+    </script>
 </head>
 <body>
     <div class="box" id="heading">
