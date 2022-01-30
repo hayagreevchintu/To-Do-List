@@ -1,21 +1,19 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const { urlencoded } = require('body-parser');
-const mongoose = require('mongoose');
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const _ = require("lodash");
+
 const app = express();
-const _ = require('lodash');
+
+app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
-app.set('view engine', 'ejs');
 
-mongoose.connect("mongodb://localhost:27017/todoListDB");
+mongoose.connect("mongodb+srv://admin:k38gRdq3d3VVd9p@to-do-cluster.wpuoj.mongodb.net/todoListDB1");
 
 const itemsSchema = {
-    name: {
-        type: String,
-        required: [true, "What's the task, bruh?"]
-    }
+    name: String,
 };
 
 const Item = mongoose.model("Item", itemsSchema);
@@ -23,9 +21,11 @@ const Item = mongoose.model("Item", itemsSchema);
 const item1 = new Item({
     name: "Wake up."
 });
+
 const item2 = new Item({
     name: "Brush your teeth."
 });
+
 const item3 = new Item({
     name: "Drink Coffee."
 });
@@ -34,16 +34,17 @@ const defaultItems = [item1, item2, item3];
 
 const listSchema = {
     name: String,
-    items : [itemsSchema],
-}
+    items: [itemsSchema]
+};
+
 const List = mongoose.model("List", listSchema);
 
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
+
     let day = "Today";
-    Item.find((err, foundItems) => {
-        if(err){
-            console.log(err);
-        } if(foundItems.length === 0){
+    Item.find({},(err, foundItems) => {
+        
+        if(foundItems.length === 0){
             Item.insertMany(defaultItems, (err) => {
                 if(err){
                     console.log(err);
@@ -51,16 +52,15 @@ app.get('/', (req, res) => {
                     console.log("Inserted default items successfully.");
                 }
             });
-            res.redirect('/');
-        }
-         else{
+            res.redirect("/");
+        } else{
             res.render("list", {listName: day, newListItems: foundItems});    
         }
         console.log(foundItems);
     });
 });
 
-app.get('/:listName', (req, res) => {
+app.get("/:listName", (req, res) => {
     const listName = _.capitalize(req.params.listName);
     List.findOne({name: listName}, (err, foundList) => {
         if(!err){
@@ -70,7 +70,6 @@ app.get('/:listName', (req, res) => {
                     items : defaultItems
                 });
                 newList.save();
-                console.log(`Saved ${listName} successfully`);
                 res.redirect("/" + listName);
             } else{
                 res.render("list", {listName: foundList.name, newListItems: foundList.items});
@@ -79,7 +78,7 @@ app.get('/:listName', (req, res) => {
     });
 });
 
-app.post('/', (req, res) => {
+app.post("/", (req, res) => {
     let item = req.body.task;
     let listName = req.body.list;
     let newItem = new Item({
@@ -87,17 +86,17 @@ app.post('/', (req, res) => {
     });
     if(listName === "Today"){
         newItem.save();
-        res.redirect('/');
+        res.redirect("/");
     } else{
         List.findOne({name : listName}, (err, foundItems) => {
             foundItems.items.push(newItem);
             foundItems.save();
-            res.redirect('/' + listName);
+            res.redirect("/" + listName);
         });
     }
 });
 
-app.post('/delete', (req, res) => {
+app.post("/delete", (req, res) => {
     const listName = req.body.listName;
     const idDelete = req.body.checkbox;
     console.log(listName);
@@ -110,16 +109,16 @@ app.post('/delete', (req, res) => {
                 console.log("Deleted Successfully.");
             }
         });
-        res.redirect('/');
+        res.redirect("/");
     } else{
         List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: idDelete}}}, (err, result) => {
             if(!err){
-                res.redirect('/' + listName);
+                res.redirect("/" + listName);
             }
         });
     }
 });
 
-app.listen(3000, () => {
+app.listen(4000, () => {
     console.log("Server is up and running!");
 });
