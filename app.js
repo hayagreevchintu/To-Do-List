@@ -10,7 +10,8 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://admin:k38gRdq3d3VVd9p@to-do-cluster.wpuoj.mongodb.net/todoListDB1");
+const mongoDBConnectionString = process.env.connectionString;
+mongoose.connect(mongoDBConnectionString);
 
 const itemsSchema = {
     name: String,
@@ -119,6 +120,11 @@ app.post("/delete", (req, res) => {
     }
 });
 
-app.listen(4000, () => {
+let port = process.env.port;
+if(port == null || port == ""){
+    port = 3000;
+}
+
+app.listen(port, () => {
     console.log("Server is up and running!");
 });
