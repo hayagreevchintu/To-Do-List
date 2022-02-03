@@ -12,7 +12,8 @@ This app has a default list with the heading "Today" and also has the capability
 The default list will get loaded in the Home route. Both the Custom lists and the default lists have CRD operations enabled. 
 Both the lists will get loaded with 3 default items: Wake Up, Brush your teeth and Drink Coffee. One key difference between the both is that when the default list is empty, it will automatically be populated with the default items again but that is not the case with the custom lists. There's no particular reason as to why I did that. I simply felt the need to differenciate between both the types at some level, coz, we've all got our quirks, right?
 
+# Default List:
 ![alt text](Screenshots/To-Do.png "Default List")
 
-
+# Custom List:
 ![alt text](Screenshots/To-Do-Custom.png "Custom List")
